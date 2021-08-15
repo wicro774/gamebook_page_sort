@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>Gamebook Page Sort</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<p>
+		本文を貼り付けて「変換を実行」ボタンを押してください。<br>
+		<textarea name="input text" id="input tarea" rows="15" cols="80">
+		</textarea><br>
+		<input type="submit" name="run" value="変換を実行" onclick="clickButtonRun()" />
+		<input type="submit" name="clear" value="クリア" onclick="clickButtonClear()" />
+	</p>
+	<br>
+	<p>
+		変換結果<br>
+		<textarea name="output text" id="output tarea" rows="15" cols="80" placeholder="ここに結果が表示されます。" readonly></textarea><br>			
+		<input type="submit" name="copy to clipboard" value="結果をクリップボードにコピー" onclick="copyOutputToClipboard()" />
+	</p>
+	<p><br>
+		※ [jump:**] タグにて参照されていないページは削除されます（第1ページは例外）。<br>
+		　ページ移動は必ず [jump:**] タグで繋げてください。
+	</p>
+	<p>
+		※変換結果の第2ページにはデフォルトで空白ページが挿入されます。<br>
+		　読者への注意喚起を加筆するなど、ご自由にご利用ください。<br><br>
+		　第2ページの記入例：<br>
+		　　※ページ移動にはページ内リンクをご利用ください。<br>
+		　　[jump:1]
+	</p>
+
+	<script type="text/javascript">
+		// 入力テキストエリアにサンプル値を代入
+		document.addEventListener("DOMContentLoaded", (event) => {
+			const sampleText = "本ツールを適用すると、\n選択肢のページ番号が連続しやすくなり、\n「選択肢2を選んだらすぐ終わりそうだな」といったネタバレ感を減らせます。\n\n選択肢1→[jump:2]\n選択肢2→[jump:5]\n選択肢3→[jump:6]\n[newpage]\n選択肢1を選んだ。\n\n選択肢1.1→[jump:3]\n選択肢1.2→[jump:4]\n[newpage]\n選択肢1.1を選んだ。\n戻る→[jump:2]\n[newpage]\n選択肢1.2を選んだ。\n戻る→[jump:2]\n[newpage]\n選択肢2を選んだ。\n[newpage]\n選択肢3を選んだ。";
+			document.getElementById("input tarea").value = sampleText;
+		});
+	</script>
+
+	<script type="text/javascript" src="main.js"></script>
+
+	<script type="text/javascript">
+		function clickButtonRun() {
+			var txt = document.getElementById("input tarea").value;
+
+			// 最後に改行コードがなければ追記
+			if(txt.length >= 1 && txt.substring(txt.length-1, txt.length) != "\n") {
+				txt = txt + "\n";
+    		}
+
+			// 変換処理メイン
+			const newTxt = convertMain(txt);
+
+			document.getElementById("output tarea").value = newTxt;
+		}
+	
+		function clickButtonClear() {
+			document.getElementById("input tarea").value = "";
+			document.getElementById("output tarea").value = "";
+		}
+	
+		function copyOutputToClipboard() {
+			var outTextArea = document.getElementById("output tarea");
+			outTextArea.select();
+			document.execCommand("Copy");
+		}
+	</script>
+
+</body>
+</html>
+
+
+
